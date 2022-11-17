@@ -21,6 +21,8 @@ public class OrdersServiceImpl implements OrdersService {
     @Autowired
     OrderRepository orderRepository;
 
+    Producer<Long, String> producer = ProducerCreator.createProducer();
+
     @Override
     public String saveOrderInDB(OrderDetails orderDetails) {
         Orders orders = new Orders();
@@ -41,7 +43,6 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Override
     public String sendOrderToKafka(OrderDetails orderDetails) {
-        Producer<Long, String> producer = ProducerCreator.createProducer();
         Gson gson = new Gson();
         ProducerRecord<Long, String> record = new ProducerRecord<Long, String>(IKafkaConstants.TOPIC_NAME, gson.toJson(orderDetails));
         try {
